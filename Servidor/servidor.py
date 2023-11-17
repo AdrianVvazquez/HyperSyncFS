@@ -4,7 +4,7 @@ import os
 
 # Enlace de socket y puerto
 # SERVER_ADDRESS = ('192.168.0.16', 22)
-SERVER_ADDRESS = ('148.239.119.53', 22)
+SERVER_ADDRESS = ('148.239.112.235', 22)
 
 def connection():
     # Creando el socket TCP/IP
@@ -15,7 +15,7 @@ def connection():
     serversocket.listen(1)
     return serversocket
 
-msn_1 = 'Hola cliente, te conectaste a servidor, bienvenido.'
+msn_1 = 'ok'
 serversocket = connection()
 amount_expected = 60
 amount_received = 0
