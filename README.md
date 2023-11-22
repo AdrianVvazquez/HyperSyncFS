@@ -5,7 +5,7 @@
 Contiene un Script para detectar los archivos entrantes a la carpeta en la que está el Script y crea una copia en el directorio backups. Si el directorio no existe se crea.
 
 ### Directorio DFS_v2_connection
-Contiene los Scripts para crear el servidor RPC y el cliente, ambos corren en el puerto 18861
+Contiene los Scripts para crear el servidor RPC y el cliente, ambos corren en el puerto 18861.
 Para correr es necesario instalar un ambiente virtual de python en este directorio.
 ```bash
 py -m venv venv
