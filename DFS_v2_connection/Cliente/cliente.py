@@ -6,11 +6,17 @@ def get_file(master, sourceDir):
     pass
     # files = master.get_files()
 
-def put_file(master, sourceFile, destFile):
+def get_all_files(master):
+    files = master.get_files()
+    print(files)
+
+def put_file(master, sourceFile):
     size = os.path.getsize(sourceFile) # get size
     with open(sourceFile, "rb") as f:
-        blocks = master.write(f.name, size, f.read()) # call server function
-    print("blocks: ", blocks)
+        file_blocks = master.write(f.name, size, f.read()) # call server function
+        
+    print("blocks: ", file_blocks)  # {file,txt, [uuid1, uuid2, ...]}
+
 
 def main(args):
     os.path.join
@@ -18,9 +24,10 @@ def main(args):
     master = c.root
     
     if args[0] == "get":
-        get_file(master, args[1]) # get source.txt 
+        get_all_files(master) # get source.txt 
+
     elif args[0] == "put":
-        put_file(master, args[1], args[2]) # put source.txt dir/dest.txt
+        put_file(master, args[1]) # put source.txt
     else:
         return "try 'put srcFile destFile OR get file'"
 
