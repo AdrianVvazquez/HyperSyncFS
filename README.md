@@ -19,3 +19,6 @@ pip freeze > requirements.txt
 - rpyc
 
 
+## Tutoriales de referencia e inspiración
+- https://rpyc.readthedocs.io/en/latest/tutorial/tut3.html
+- https://github.com/sanketplus/PyDFS/blob/srecon/pydfs/master.py
