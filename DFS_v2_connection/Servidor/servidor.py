@@ -14,11 +14,13 @@ class DfsService(rpyc.Service):
     def __init__(self):
         self.Chunks = {}
         self.Partitions = []
+        self.Minions = []   # [{'ip': [uuid1, uuid2, ...]}, ...]
 
-    # def show_files(self, dir): 
+    # def list_dir(self, dir): 
     #     return os.listdir(dir)
 
     def on_connect(self, conn):
+        # Asignar ID y crear archivo en cliente con id
         print(f"[Conexión nueva] {conn}")
         self.Connections.append(conn)
         # code that runs when a connection is created
@@ -31,24 +33,39 @@ class DfsService(rpyc.Service):
         return self.My_files
 
     def exposed_write(self, file_name, size, data): # this is an exposed method
+        if not self.Minions:
+            return "Lo siento. No hay servidores disponibles."
+
         print(
-            "put", file_name,
+            "Saving", file_name,
             "size", size,
         )
+
         # save file in local and append to my_files
         with open(file_name, 'wb') as f:
             f.write(data)
             self.My_files.append(f.name)
         # get blocks
-        self.Chunks[file_name] = []
         chunks = self.Get_Chunks(file_name, size)
-        print("¡Archivo creado exitosamente!")
         
+        for minion in self.Minions:
+            for i in self.Partitions:
+                # Guardar registro de particiones
+
+                # print(i[1])
+                c = rpyc.connect("localhost", 18862)
+                minion_root = c.root
+                minion_root.save_chunks(chunks)
+
+
+
+        print("¡Archivo creado exitosamente!")
         return chunks
 
 
     def Get_Chunks(self, file, size):
         # get total of blocks
+        self.Chunks[file] = []
         blocks = math.ceil(size/CHUNKS_SIZE)
         print("blocks", blocks)
         # Write in minions
@@ -57,11 +74,10 @@ class DfsService(rpyc.Service):
             for i in range(blocks):
                 data = f.read(CHUNKS_SIZE)
                 id = uuid.uuid4()
-                # Agregar tupla
+                self.Chunks[file].append(id)
                 partition = (id, data)
                 self.Partitions.append(partition) # data = partitions[i][1]
                                                     # id = partitions[i][0]
-                self.Chunks[file].append(id)
         return self.Chunks
 
 
