@@ -12,7 +12,7 @@ py -m venv venv
 ```
 Después de activar el ambiente virtual instala las librerías del archivo de requerimientos:
 ```bash
-pip freeze > requirements.txt
+pip install -r requirements.txt
 ```
 
 ## Librerías
