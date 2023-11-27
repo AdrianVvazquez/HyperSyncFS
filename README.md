@@ -1,4 +1,4 @@
-# Systema de Archivos Distribuido en Python
+# Systema de Archivos Distribuido en Python con rpyc
 
 ## Descripción
 ### Directorio DFS_v1.2_backups
@@ -14,9 +14,6 @@ Después de activar el ambiente virtual instala las librerías del archivo de re
 ```bash
 pip install -r requirements.txt
 ```
-
-## Librerías
-- rpyc
 
 
 ## Tutoriales de referencia e inspiración
