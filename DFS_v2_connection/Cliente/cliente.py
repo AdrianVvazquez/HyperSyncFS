@@ -30,6 +30,11 @@ def authenticate(master, user_name, ip, port):
     except ValueError:
         print("[Error]: Autenticación. Borra el archivo auth.txt y vuelve a correr el programa.")
 
+def write_cache(cache_file, chunks):
+    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+    with open(cache_file, 'wb+') as f:
+        for chunk in chunks:
+            f.write(chunk[3])
 
 def get_file(master, host_id, sourceDir):
     # from pathlib import Path
@@ -38,13 +43,12 @@ def get_file(master, host_id, sourceDir):
     # remote exception
     metadata = chunks[:2]
     if metadata[0] == 'err':
-        sys.stdout.write(metadata[1])
+        print(metadata[1])
         exit(1)
     
     # save in cache
-    with open(f'cache/{sourceDir.split(".")[0]}-cache.txt', 'wb+') as f:
-        for chunk in chunks:
-            f.write(chunk[3])
+    cache_file = f'cache/{sourceDir.split(".")[0]}-cache.txt'
+    write_cache(cache_file, chunks)
     
     # local exception
     if os.path.exists(sourceDir):
@@ -52,10 +56,11 @@ def get_file(master, host_id, sourceDir):
         while opc != 'Y' and opc != 'y':
             opc = input("El archivo ya existe en tu máquina... ¿Sobrescribir archivo? Y/n: ")
             if opc == 'N' or opc == 'n':
+                print(f"No se guardó '{sourceDir}'\n")
                 exit(1)
         
         # Escribir local
-        print("Guardando '"+sourceDir+"'...")
+        print(f"Guardando '{sourceDir}'...")
         with open(sourceDir, 'wb+') as f:
             for chunk in chunks:
                 f.write(chunk[3])
