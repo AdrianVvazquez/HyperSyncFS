@@ -32,6 +32,13 @@ class Host():
     def __str__(self):
         return self.name
 
+def write_cache(cache_file, data):
+    # Crear el directorio si no existe
+    print(cache_file)
+    os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+    with open(cache_file, 'wb') as f:
+        f.write(data)
+
 CHUNK_SIZE = 100
 class MasterService(rpyc.Service):
     registered_hosts = []
@@ -88,16 +95,16 @@ class MasterService(rpyc.Service):
         if file_name in self.My_files:
             return ['err', 'El archivo que tratas de guardar ya existe. Cambiar el nombre e intenta de nuevo.']
 
-        with open(f'cache/{file_name.split(".")[0]}-cache.txt', 'wb') as f:
-            f.write(data)
-        
+        cache_file = f'cache/{file_name.split(".")[0]}-cache.txt'
+        write_cache(cache_file, data)
+
         # save metadata
         md_file = File_Metadata(id=str(uuid.uuid4()), name=file_name, owner=user_id, size=size)
 
         # get blocks number
         n_blocks = math.ceil(size/CHUNK_SIZE)
         n_packets = math.ceil(n_blocks/len(self.Workers))
-        print('...blocks:', n_blocks, 'packets:', n_packets, '...workers:', len(self.Workers))
+        print('...blocks:', n_blocks, '...workers:', len(self.Workers), 'packets:', n_packets)
         
         # Write in workers
         data_seek = 0
