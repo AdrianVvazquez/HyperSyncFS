@@ -3,6 +3,7 @@ import rpyc
 import uuid
 import math
 
+@rpyc.service
 class WorkerService(rpyc.Service):
     ALIASES = ["SUPER_WORKER"]
     My_files = []   # Lista con nombres de los archivos
@@ -22,13 +23,16 @@ class WorkerService(rpyc.Service):
         # code that runs after the connection has already closed
         return "¡Adios!"
     
-    def exposed_Share_my_id(self):
+    @rpyc.exposed
+    def Share_my_id(self):
         print("sharing id")
         return self.worker_id
 
+    @rpyc.exposed
     def exposed_get_files(self): # this is an exposed method
         return self.My_files
     
+    @rpyc.exposed
     def save_chunks(self, chunks): # this is an exposed method
         for chunk in chunks:
             with open(f'{chunk[0]}-{chunk[1]}', 'wb') as f:
@@ -56,7 +60,5 @@ if __name__ == "__main__":
     
 
     service = classpartial(WorkerService, worker_id=host_id)
-    t = ThreadedServer(service, port=my_port, protocol_config={
-        'allow_public_attrs': True,
-    })
+    t = ThreadedServer(service, port=my_port)
     t.start()

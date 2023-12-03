@@ -40,6 +40,7 @@ def write_cache(cache_file, data):
         f.write(data)
 
 CHUNK_SIZE = 100
+@rpyc.service
 class MasterService(rpyc.Service):
     registered_hosts = []
     active_connections = []  
@@ -56,8 +57,8 @@ class MasterService(rpyc.Service):
         self.active_connections.remove(conn)
         print(f"[logout]", conn)
 
-
-    def exposed_Add_Host(self, host_name, host_ip, host_port):
+    @rpyc.exposed
+    def Add_Host(self, host_name, host_ip, host_port):
         host = Host(str(uuid.uuid4()), host_name, host_ip, host_port)
         # TODO: si ya existe
         # for host_tmp in self.registered_hosts:
@@ -67,15 +68,16 @@ class MasterService(rpyc.Service):
         print(self.registered_hosts)
         return host.id
 
-
-    def exposed_Add_Worker(self, host_id):
+    @rpyc.exposed
+    def Add_Worker(self, host_id):
         host = [host for host in self.registered_hosts if host_id == host.id][0]
         self.Workers[host.id] = host
         print('[new worker]', host.id, host.name, host.ip, host.port)
         return True
 
 
-    def exposed_read(self, user_id, file_name):
+    @rpyc.exposed
+    def read(self, user_id, file_name):
         file_tmp = self.My_files.get(file_name)
 
         if not file_tmp:
@@ -86,7 +88,8 @@ class MasterService(rpyc.Service):
         return file_tmp.get_chunks()  # returns a List
         
 
-    def exposed_write(self, file_name, size, data, user_id):  # recv data in binary
+    @rpyc.exposed
+    def write(self, file_name, size, data, user_id):  # recv data in binary
         if not self.Workers:
             return "Lo siento. El servicio no está disponible."
         
@@ -148,7 +151,5 @@ if __name__ == "__main__":
     os.path.join
     # run service
     t = ThreadedServer(MasterService(), port=18861)
-    #     'allow_public_attrs': True,
-    # })
     # }, authenticator = magic_word_authenticator)
     t.start()
