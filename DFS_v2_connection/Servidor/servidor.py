@@ -212,7 +212,6 @@ class MasterService(rpyc.Service):
 
         return [self.send_chunk, [new_file.chunks_number, self.chunk_size]]
 
-    @rpyc.exposed
     def send_chunk(self, file_name, data):
         if len(data) > self.chunk_size:
             return ['err', "Reduce el tamaño de los datos"]
