@@ -187,17 +187,17 @@ class MasterService(rpyc.Service):
             worker = self.Workers.get(chunk['worker_id'])
             conn = rpyc.connect(worker.ip, worker.port)
             # cache_client_file = conn.root.get_chunk(chunk, client_write_access)
-            data_chunks.append(conn.root.get_chunk_2(chunk))
+            data_chunks.append(conn.root.get_chunk(chunk))
         client_write_access(file_name, data_chunks)
         
     @rpyc.exposed
     def write(self, file_name, file_size, userName):
         # exceptions
+        if not self.Workers:
+            return ['err', "Lo siento. El servicio no está disponible."]
         user = self.registered_hosts.get(userName)
         if not user.auth:
             return ['err', "No estás registrado."]
-        if not self.Workers:
-            return ['err', "Lo siento. El servicio no está disponible."]
         if file_name in self.My_files:
             return ['err', "El archivo que tratas de guardar ya existe. Cambiar el nombre e intenta de nuevo."]
         
