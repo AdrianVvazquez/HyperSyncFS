@@ -5,8 +5,8 @@ from os.path import isfile, join
 
 @rpyc.service
 class WorkerService(rpyc.Service):
-    ALIASES = ["SUPER_WORKER", 'WORKER1']
-    ip = ('localhost', 18863)
+    ALIASES = ["SUPER_WORKER", 'WORKER3']
+    ip = ('localhost', 18864)
     auth_key = ''
     
     @rpyc.exposed
