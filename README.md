@@ -13,10 +13,13 @@ Un servidor RPC que corre en el puerto 18861.
 Guardar metadatos.
 
 ## Cliente
+Un cliente que se conectará al Master y pedirá peticiones
 
 ## Worker
 Los servidores con los directorios en donde se almacenarán los chunks de datos.
 
+
+### Correr proyecto localmente
 ```bash
 py -m venv venv
 ```
