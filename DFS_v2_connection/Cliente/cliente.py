@@ -135,7 +135,8 @@ def write__(cache_file, chunks):
 def main(args):
     os.path.join
     # TODO: userName = input("User name: ")
-    user_name = 'adrian'
+    user_name = input("User name: ")
+    # user_name = 'adrian'
     ip = 'localhost'
     port = 18861
 
