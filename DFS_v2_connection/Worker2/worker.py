@@ -19,17 +19,10 @@ class WorkerService(rpyc.Service):
             f.write(chunk['data'])
 
     @rpyc.exposed
-    def get_chunk_2(self, chunk):
+    def get_chunk(self, chunk):
         chunk_name = f"{chunk['file_name']}/{chunk['index']}-{chunk['chunk_id']}"
         with open(chunk_name, 'rb') as f:
             return f.read()
-    
-    @rpyc.exposed
-    def get_chunk(self, chunk, write_to_client):
-        chunk_name = f"{chunk['file_name']}/{chunk['index']}-{chunk['chunk_id']}"
-        with open(chunk_name, 'r') as f:
-            cache_file = write_to_client(chunk['file_name'], f.read())
-        return cache_file
 
 def authenticate(master, user_name, ip, port):
     print(f"\nBIENVENIDO {user_name}")
