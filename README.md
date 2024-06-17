@@ -1,5 +1,7 @@
-# 📄🗃️ Sistema de Archivos Distribuido en 🐍Python con rpyc 
-La gestión eficiente de archivos se ha convertido en una piedra angular para la productividad y la colaboración en entornos profesionales y empresariales. En este contexto, introducimos nuestro propio sistema distribuido de archivos. Con almacenamiento y recuperación de archivos avanzado. Opera en un entorno distribuido, brindando flexibilidad y escalabilidad.
+# 🗃️ Sistema de Archivos Distribuido en 🐍Python con rpyc 
+📄 La gestión eficiente de archivos se ha convertido en una piedra angular para la productividad y la colaboración en entornos profesionales y empresariales. 
+
+En este contexto, introducimos nuestro propio sistema distribuido de archivos. ¡Con almacenamiento y recuperación de archivos avanzado! ¡Opera en un entorno distribuido, brindando flexibilidad y escalabilidad!
 
 ## Arquitectura del sistema
 Se aplicó una arquitectura de componentes en donde el registro de usuarios y la gestión de archivos se basa en 3 nodos.
@@ -16,10 +18,10 @@ Estos nodos son replicados, cada uno con diferentes funciones:
 - 4 - Servidores Esclavos (Workers) que estarán atendiendo peticiones del Maestro y ejecutando consultas a la base de datos.
 
 ## Características funcionales:
-- Frontend: Se usa la misma interfaz de usuario del sistema de archivos local de Windows, Mac y Linux.
 - Metadatos: Master genera estos archivos y los guarda en formato JSON o texto plano. El Servidor Master guarda una lista con objetos de metadatos de todos los archivos y las referencias al Worker en donde reside cada chunk de datos que forma un archivo. 
 - Acceso: Master genera llaves de acceso para los Clientes y los registra como usuarios conocidos. La autenticación empieza con una petición del Cliente a Master.
 - Copias de seguridad: Contiene un script para detectar los archivos añadidos a tu carpeta local. Los Workers crean una copia de todos los archivos en el directorio local "/backups". Si el directorio "backups" no existe se crea uno nuevo.
+- Frontend: Se usa la misma interfaz de usuario del sistema de archivos local de Windows, Mac y Linux.
 
 ## Autenticación 🔑
 La autenticación inicia del lado del Cliente o del Worker. La primera petición de conexión que recibe Master va directo a la función Auth_Host(). Esta función decidirá si autorizar al usuario o iniciar con el proceso de autentización. El proceso de autenticación de la primera conexión genera un nuevo archivo con el nombre “auth.txt” en el Cliente, que usará para autenticarse cuando vuelva a ingresar.
